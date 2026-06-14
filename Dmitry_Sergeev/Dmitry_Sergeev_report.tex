@@ -3,8 +3,8 @@
 \usepackage[a4paper, top=8mm, bottom=8mm, left=8mm, right=8mm]{geometry}
 
 \usepackage{fontspec}
-\setmainfont{Liberation Serif}[Ligatures=TeX] 
-\newfontfamily\cyrillicfont{Liberation Serif}[Ligatures=TeX]
+\setmainfont{CMU Serif}[Ligatures=TeX] 
+\newfontfamily\cyrillicfont{CMU Serif}[Ligatures=TeX]
 \newfontfamily{\russianfonttt}[Scale=0.7]{DejaVuSansMono}
 
 \usepackage{polyglossia}
@@ -64,8 +64,7 @@
 
 \section{Описание предлагаемого решения}
 
-В качестве эталона использовались готовые нативные реализации аналогичных алгоритмов из библиотеки LAGraph на языке C.
-В качестве вычислительного движка как в Python-версии (\texttt{python-graphblas}), так и в C-версии (\texttt{LAGraph}), используется библиотека SuiteSparse:GraphBLAS версии 9.4.5, что делает сравнение корректным~--- обе реализации опираются на один и тот же движок.
+В качестве вычислительного ядра как в Python-версии (\texttt{python-graphblas}), так и в C-версии (\texttt{LAGraph}), используется библиотека SuiteSparse:GraphBLAS версии 9.4.5, что делает сравнение корректным~--- обе реализации опираются на одну и ту же программную основу.
 
 Были реализованы три алгоритма подсчёта треугольников с использованием \texttt{python-graphblas}:
 \begin{itemize}
@@ -77,7 +76,7 @@
     
     \item \textbf{Алгоритм Sandia} работает с нижнетреугольной частью матрицы смежности и использует формулу:
     \[
-    \text{triangles} = \sum_{i} \sum_{j} \left( (L L)_{ij} \cdot L_{ij} \right)
+    \text{triangles} = \sum_{i} \sum_{j} \left( (L \times L)_{ij} \cdot L_{ij} \right)
     \]
     где $L = \text{tril}(A)$.
     
@@ -115,7 +114,7 @@
     \end{tabular}
 \end{table}
 
-Наивный алгоритм был исключён из основных замеров: на использованных грахах процесс завершался с ошибкой нехватки памяти.
+Наивный алгоритм был исключён из основных замеров: на использованных графах процесс завершался с ошибкой нехватки памяти.
 
 Для каждой комбинации (граф, алгоритм, реализация) проводилась статистическая обработка результатов: тесты на нормальность, среднее, стандартное отклонение, стандартная ошибка среднего (SEM) и доверительный интервал с уровнем доверия 95\%.
 Результаты приведены в таблице~\ref{tab:benchmarks}.
@@ -130,40 +129,40 @@
         \textbf{Граф} & \textbf{Конфигурация} & \textbf{Время} & \textbf{Std (\%)} \\
         \midrule
         \multirow{4}{*}{web-NotreDame}
-            & burkhard-py   & $0.1257 \pm 0.0007$ & 1.57 \\
-            & sandia-py     & $0.0305 \pm 0.0005$ & 4.85 \\
-            & burkhard-lagr & $0.1244 \pm 0.0007$ & 2.16 \\
-            & sandia-lagr   & $0.0331 \pm 0.0004$ & 2.64 \\
+            & burkhard-py   & $0.126 \pm 0.001$ & 1.57 \\
+            & sandia-py     & $0.031 \pm 0.001$ & 4.85 \\
+            & burkhard-lagr & $0.124 \pm 0.001$ & 2.16 \\
+            & sandia-lagr   & $0.033 \pm 0.001$ & 2.64 \\
         \midrule
         \multirow{4}{*}{web-Stanford}
-            & burkhard-py   & $1.1784 \pm 0.0005$ & 0.52 \\
-            & sandia-py     & $0.2643 \pm 0.0004$ & 0.51 \\
-            & burkhard-lagr & $1.1804 \pm 0.0038$ & 0.87 \\
-            & sandia-lagr   & $0.2607 \pm 0.0004$ & 1.00 \\
+            & burkhard-py   & $1.18 \pm 0.01$ & 0.52 \\
+            & sandia-py     & $0.26 \pm 0.01$ & 0.51 \\
+            & burkhard-lagr & $1.18 \pm 0.01$ & 0.87 \\
+            & sandia-lagr   & $0.26 \pm 0.01$ & 1.00 \\
         \midrule
         \multirow{4}{*}{roadNet-CA}
-            & burkhard-py   & $0.0578 \pm 0.0001$ & 0.57 \\
-            & sandia-py     & $0.0464 \pm 0.0002$ & 1.30 \\
-            & burkhard-lagr & $0.0564 \pm 0.0002$ & 0.99 \\
-            & sandia-lagr   & $0.0543 \pm 0.0002$ & 1.32 \\
+            & burkhard-py   & $0.058 \pm 0.001$ & 0.57 \\
+            & sandia-py     & $0.046 \pm 0.001$ & 1.30 \\
+            & burkhard-lagr & $0.056 \pm 0.001$ & 0.99 \\
+            & sandia-lagr   & $0.054 \pm 0.001$ & 1.32 \\
         \midrule
         \multirow{4}{*}{cit-Patents}
-            & burkhard-py   & $4.322 \pm 0.012$  & 0.95 \\
-            & sandia-py     & $0.6794 \pm 0.0009$ & 0.30 \\
-            & burkhard-lagr & $4.309 \pm 0.005$  & 0.29 \\
-            & sandia-lagr   & $0.6982 \pm 0.0012$ & 0.42 \\
+            & burkhard-py   & $4.32 \pm 0.01$  & 0.95 \\
+            & sandia-py     & $0.68 \pm 0.01$  & 0.30 \\
+            & burkhard-lagr & $4.31 \pm 0.01$  & 0.29 \\
+            & sandia-lagr   & $0.70 \pm 0.01$  & 0.42 \\
         \midrule
         \multirow{4}{*}{amazon-2008}
-            & burkhard-py   & $0.2935 \pm 0.0004$ & 0.44 \\
-            & sandia-py     & $0.1026 \pm 0.0001$ & 0.29 \\
-            & burkhard-lagr & $0.3023 \pm 0.0003$ & 0.29 \\
-            & sandia-lagr   & $0.1111 \pm 0.0004$ & 0.86 \\
+            & burkhard-py   & $0.29 \pm 0.01$ & 0.44 \\
+            & sandia-py     & $0.10 \pm 0.01$ & 0.29 \\
+            & burkhard-lagr & $0.30 \pm 0.01$ & 0.29 \\
+            & sandia-lagr   & $0.11 \pm 0.01$ & 0.86 \\
         \midrule
         \multirow{4}{*}{amazon0302}
-            & burkhard-py   & $0.0868 \pm 0.0001$ & 0.38 \\
-            & sandia-py     & $0.0273 \pm 0.0001$ & 0.87 \\
-            & burkhard-lagr & $0.0835 \pm 0.0004$ & 0.65 \\
-            & sandia-lagr   & $0.0245 \pm 0.0001$ & 3.57 \\
+            & burkhard-py   & $0.087 \pm 0.001$ & 0.38 \\
+            & sandia-py     & $0.027 \pm 0.001$ & 0.87 \\
+            & burkhard-lagr & $0.084 \pm 0.001$ & 0.65 \\
+            & sandia-lagr   & $0.025 \pm 0.001$ & 3.57 \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -190,9 +189,6 @@
 Во всех трёх случаях LAGraph стабильно тратит больше относительного времени на функции \texttt{GB\_AxB\_sax\-py3\_flop\-count}, \texttt{GB\_select\_posi\-ti\-o\-nal\_pha\-se1} и \texttt{GB\_msort\_3}.
 Точная причина различия (например, отличия во внутреннем формате матрицы, передаваемой из Python и из C) не уста\-нав\-ли\-ва\-лась~--- зафиксирован лишь устойчивый факт различия в относительном времени выполнения одних и тех же внутренних функций SuiteSparse.
 
-Для минимизации влияния посторонних факторов на результаты замеров были дополнительно предприняты следующие меры: фиксация частоты CPU на минимальное и на максимальное значение, изоляция CPU через параметры загрузчика GRUB (\texttt{isolcpus}, \texttt{nohz\_full}, \texttt{rcu\_nocbs}).
-Ни одна из мер не дала значимого уменьшения числа выбросов, что может объясняться гибридной архитектурой процессора (P-cores и E-cores) на ноутбуке.
-
 Полученные результаты подтверждают, что реализация на \texttt{python-graphblas} может не уступать готовым реализациям из LAGraph, а на части графов даже превосходить их.
 
 \section{Заключение}
@@ -211,4 +207,3 @@
 Скрипты для подготовки окружения и запуска замеров, инструкции по сборке и воспроизведению результатов, а также построенные боксплоты и flame graphs представлены в файле \texttt{README.md} репозитория.
 
 \end{document}
-
